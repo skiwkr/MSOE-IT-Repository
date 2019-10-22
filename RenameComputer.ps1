@@ -76,12 +76,19 @@ If (-NOT ($CurrentComputerName -like $CorrectComputerName)) {#Is the name correc
         Try 
         {
             Remove-ADComputer -Identity $CurrentComputerName -Credential $Credential
+        }
+        Catch {
+            Write-Host "Computer not in the domain, trying to add to arbitrary workgroup"
+            Write-Log "Computer not in the domain, trying to add to arbitrary workgroup"
+            Write-Log  "Error Message: $($_.Exception.Message)"
+        }
+        Try {
             Add-Computer -WorkgroupName IT -Credential $Credential -Restart -Confirm
         }
         Catch
         {
-            Write-Host "AD Computer Deletion Failed, Computer not Renamed"
-            Write-Log "AD Computer Deletion Failed, Computer not Renamed"
+            Write-Host "Can't unjoin from domain, Computer not Renamed"
+            Write-Log "Can't unjoin from domain, Computer not Renamed"
             Write-Log  "Error Message: $($_.Exception.Message)"
         }
     }else {
