@@ -70,8 +70,7 @@ If (-NOT ($CurrentComputerName -like $CorrectComputerName)) {#Is the name correc
     #Rename the computer
     $User = "ad.msoe.edu\helpdeskadmanage"
     $PWord = ConvertTo-SecureString -String "~~password~~" -AsPlainText -Force ##Place password for AD account, get from Sys Admin
-    $Credential = "AD\Helpdeskadmanage"
-    #$Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $User, $PWord
+    $Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $User, $PWord
     If ((Get-WmiObject Win32_ComputerSystem).Domain -like "ad.msoe.edu") {
         Try 
         {
