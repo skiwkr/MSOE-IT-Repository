@@ -32,8 +32,8 @@ Remove-Item -Path '..\RenameScript.bat' -ErrorAction SilentlyContinue
 catch {
 Write-Host "Rename script batch file not present, creating file"
 }
-$ADInstallLocation = (Get-Location).ToString()
-$RunRenameLocation = $ADInstallLocation.TrimEnd("CompilationFiles")
+$ADInstallLocation = ((((Get-Location).ToString()).TrimStart("Microsoft.PowerShell.Core\FileSystem")).TrimStart("::"))
+$RunRenameLocation = ((($ADInstallLocation).ToString()).TrimEnd("CompilationFiles"))
 $CMDFileInput = 'net user administrator thisisthepassword 
 powershell.exe -executionpolicy bypass -file "' + $ADInstallLocation + '\Install-ADModule.ps1" /wait
 start ' +$RunRenameLocation + 'RenameComputer.exe -executionpolicy bypass
@@ -50,7 +50,7 @@ Write-Host "Shortcut not present, creating file"
 $WshShell = New-Object -comObject WScript.Shell 
 $Shortcut = $WshShell.CreateShortcut("..\RunMeForRename.lnk")
 $ScriptDir = Get-Location
-$Shortcut.TargetPath = ($ScriptDir.ToString()).TrimEnd("CompilationFiles") + '\RenameScript.bat'
+$Shortcut.TargetPath = (((((($ScriptDir).ToString()).TrimEnd("CompilationFiles")).TrimStart("Microsoft.PowerShell.Core\FileSystem")).TrimStart("::")) + "RenameScript.bat")
 $Shortcut.Save()
 
 $bytes = [System.IO.File]::ReadAllBytes("..\RunMeForRename.lnk")
